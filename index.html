@@ -37,7 +37,6 @@
           fetch(apiUrl)
             .then((response) => response.json())
             .then(({ datos }) => {
-              console.log(datos);
               container.removeChild(loader);
               container.appendChild(cardsContainer);
               datos.forEach((dato) => {
@@ -60,10 +59,9 @@
             })
             .catch((error) => {
               alert("Sin resultados");
-              console.log(error);
             })
         )
-        .then();
+    
     };
   </script>
 </html>
