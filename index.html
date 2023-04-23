@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <title>SmartMobile.com</title>
+  </head>
+  <body>
+    <header>
+      <h1>SmartMobile.com</h1>
+    </header>
+
+    <h2>¡Encuentra tu próximo teléfono!</h2>
+    <div id="cards-container">
+      <button id="button" onclick="showCards()">Buscar todos</button>
+    </div>
+  </body>
+  <script>
+    const apiUrl =
+      "https://script.googleusercontent.com/macros/echo?user_content_key=rZ4xKrDPhJ0klaF_vh68AIAu3s6PDc3upUJvWx6eANHPKvJBJYhCYpDLhVRXf45QvmIfgm_vTBZGYvTm0ToKkzopH7pb8vLom5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnO4gf8zcSmcs2qWG7B9pNKKLbFphdX-bTkoShcb9t36nwzTtcIZlrD9GPUzi5PCnj7LoK1OHpZQxVbzE229P1_jp5eBrc1jdrtz9Jw9Md8uu&lib=M-wO_Ib4Us5NuxU5jsrX4U18m_PWh0xni";
+
+    const showCards = () => {
+      var loader = document.createElement("img");
+      loader.src = "https://media.tenor.com/On7kvXhzml4AAAAC/loading-gif.gif";
+      loader.alt = "loading";
+      loader.width = 80;
+      var container = document.getElementById("cards-container");
+      var button = document.getElementById("button");
+      var cardsContainer = document.createElement("div");
+      cardsContainer.classList.add("cards");
+      container.removeChild(button);
+      container
+        .appendChild(loader)
+        .then(
+          fetch(apiUrl)
+            .then((response) => response.json())
+            .then(({ datos }) => {
+              console.log(datos);
+              container.removeChild(loader);
+              container.appendChild(cardsContainer);
+              datos.forEach((dato) => {
+                const newDiv = document.createElement("div");
+                newDiv.classList.add("card");
+                var marca = document.createElement("h4");
+                var modelo = document.createElement("h3");
+                var imagen = document.createElement("img");
+                imagen.src = dato.imagen;
+                marca.innerText = dato.marca;
+                modelo.innerText = dato.modelo;
+                var precio = document.createElement("p");
+                precio.innerText = dato.precio;
+                newDiv.appendChild(marca);
+                newDiv.appendChild(imagen);
+                newDiv.appendChild(modelo);
+                newDiv.appendChild(precio);
+                cardsContainer.appendChild(newDiv);
+              });
+            })
+            .catch((error) => {
+              alert("Sin resultados");
+              console.log(error);
+            })
+        )
+        .then();
+    };
+  </script>
+</html>
