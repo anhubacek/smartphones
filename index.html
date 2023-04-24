@@ -13,55 +13,49 @@
     </header>
 
     <h2>¡Encuentra tu próximo teléfono!</h2>
-    <div id="cards-container">
-      <button id="button" onclick="showCards()">Buscar todos</button>
-    </div>
+    <main id="cards-container">
+      <button id="search-button" onclick="showCards()">Buscar todos</button>
+    </main>
   </body>
   <script>
     const apiUrl =
-      "https://script.googleusercontent.com/macros/echo?user_content_key=rZ4xKrDPhJ0klaF_vh68AIAu3s6PDc3upUJvWx6eANHPKvJBJYhCYpDLhVRXf45QvmIfgm_vTBZGYvTm0ToKkzopH7pb8vLom5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnO4gf8zcSmcs2qWG7B9pNKKLbFphdX-bTkoShcb9t36nwzTtcIZlrD9GPUzi5PCnj7LoK1OHpZQxVbzE229P1_jp5eBrc1jdrtz9Jw9Md8uu&lib=M-wO_Ib4Us5NuxU5jsrX4U18m_PWh0xni";
+      "https://script.googleusercontent.com/macros/echo?user_content_key=v3bU3WAwlXSe_BixytJt5DqEe3srA17Q1g8foeOQBW8tlAnQharoClYYgqGV48eu0nGoFpSUqGErVb6DnPGMmqm1TUB93lwWm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnO7ld7VjzSaR7t0GrQyJ-zteoGuMmlVnLnlbrEPGwTim18MmsnWKf1AOQawQOXheiradwMKfj-VqgtiCs4vDxt-cPI_0Yu126Q&lib=MyPsVzXOMrX8uK1PWx51MPeKEOrVaWvYM";
 
-    const showCards = () => {
-      var loader = document.createElement("img");
+    function showCards() {
+      const button = document.getElementById("search-button");
+      const container = document.getElementById("cards-container");
+      const loader = document.createElement("img");
       loader.src = "./images/loader.gif";
-      loader.alt = "loading";
-      loader.width = 80;
-      var container = document.getElementById("cards-container");
-      var button = document.getElementById("button");
-      var cardsContainer = document.createElement("div");
-      cardsContainer.classList.add("cards");
       container.removeChild(button);
-      container
-        .appendChild(loader)
-        .then(
-          fetch(apiUrl)
-            .then((response) => response.json())
-            .then(({ datos }) => {
-              container.removeChild(loader);
-              container.appendChild(cardsContainer);
-              datos.forEach((dato) => {
-                const newDiv = document.createElement("div");
-                newDiv.classList.add("card");
-                var marca = document.createElement("h4");
-                var modelo = document.createElement("h3");
-                var imagen = document.createElement("img");
-                imagen.src = dato.imagen;
-                marca.innerText = dato.marca;
-                modelo.innerText = dato.modelo;
-                var precio = document.createElement("p");
-                precio.innerText = dato.precio;
-                newDiv.appendChild(marca);
-                newDiv.appendChild(imagen);
-                newDiv.appendChild(modelo);
-                newDiv.appendChild(precio);
-                cardsContainer.appendChild(newDiv);
-              });
-            })
-            .catch((error) => {
-              alert("Sin resultados");
-            })
-        )
-    
-    };
+      container.appendChild(loader);
+      fetch(apiUrl)
+        .then((response) => response.json())
+        .then((response) => {
+          response.datos.forEach((dato) => {
+            const newDiv = document.createElement("div");
+            newDiv.classList.add("card");
+            container.classList.add("cards");
+
+            const marca = document.createElement("h4");
+            const modelo = document.createElement("h3");
+            const precio = document.createElement("p");
+            const imagen = document.createElement("img");
+
+            marca.innerText = dato.marca;
+            modelo.innerText = dato.modelo;
+            precio.innerText = dato.precio;
+            imagen.src = dato.imagen;
+
+            newDiv.appendChild(marca);
+            newDiv.appendChild(modelo);
+            newDiv.appendChild(imagen);
+            newDiv.appendChild(precio);
+
+            container.appendChild(newDiv);
+          });
+          container.removeChild(loader);
+        })
+        .catch((error) => alert("No hay resultados!"));
+    }
   </script>
 </html>
